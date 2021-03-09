@@ -11,7 +11,7 @@ import Workspace from './components/Workspace'
 import ItemsListComponent from './components/ItemsListComponent'
 import ListsComponent from './components/ListsComponent'
 */}
-class App extends Component {
+class App extends Component {//commit test
   constructor(props) {
     // ALWAYS DO THIS FIRST
     super(props);
@@ -55,6 +55,7 @@ class App extends Component {
       useVerboseFeedback: true
     }
   }
+  //constructor ends here
 
   // WILL LOAD THE SELECTED LIST
   loadToDoList = (toDoList) => {
