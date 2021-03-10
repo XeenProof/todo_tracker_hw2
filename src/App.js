@@ -5,6 +5,8 @@ import jsTPS from './common/jsTPS'
 
 // IMPORTING TRANSACTIONS
 import AddNewItem_Transaction from './transactions/AddNewItem_Transaction.js'
+import RemoveItem_Transaction from './transactions/RemoveItem_Transaction.js'
+import Move_Transaction from './transactions/Move_Transaction.js'
 
 // THESE ARE OUR REACT COMPONENTS
 import Navbar from './components/Navbar'
@@ -55,14 +57,15 @@ class App extends Component {//commit test
       currentList: {items: []},
       nextListId: highListId+1,
       nextListItemId: highListItemId+1,
-      useVerboseFeedback: true
+      useVerboseFeedback: true,
+      listLoaded: false
     }
   }
   //constructor ends here
 
   // WILL LOAD THE SELECTED LIST
   loadToDoList = (toDoList) => {
-    console.log("loading " + toDoList);
+    //console.log("loading " + toDoList);
 
     // MAKE SURE toDoList IS AT THE TOP OF THE STACK BY REMOVING THEN PREPENDING
     const nextLists = this.state.toDoLists.filter(testList =>
@@ -73,8 +76,16 @@ class App extends Component {//commit test
 
     this.setState({
       toDoLists: nextLists,
-      currentList: toDoList
+      currentList: toDoList,
+      listLoaded: true
     });
+  }
+
+  closeToDoList = () => {
+    this.setState({
+      currentList: {items: []},
+      listLoaded: false
+    })
   }
 
   addNewList = () => {//creates a new list and sets it as current list
@@ -95,6 +106,31 @@ class App extends Component {//commit test
     this.tps.addTransaction(transaction);
   }
 
+  removeItemTransaction = (listItem) => {
+    let index = this.getIndexOfItem(this.state.currentList.items,listItem.id);
+    let transaction = new RemoveItem_Transaction(this, listItem, index);
+    this.tps.addTransaction(transaction);
+  }
+
+  upTransaction = (item) => {
+    // if(this.getIndexOfItem(item)-1 < 0){
+    //   return;
+    // }
+    
+    let index = this.getIndexOfItem(this.state.currentList.items, item.id);
+    let transaction = new Move_Transaction(this, index, index-1);
+    this.tps.addTransaction(transaction);
+  }
+
+  downTransaction = (item) => {
+    // if(this.getIndexOfItem(item)+1 >= this.state.currentList.items.length()){
+    //     return;
+    // }
+    let index = this.getIndexOfItem(this.state.currentList.items, item.id);
+    let transaction = new Move_Transaction(this, index, index+1);
+    this.tps.addTransaction(transaction);
+  }
+
   //used in: addNewItemTransaction
   addNewListItem = () => {
     let newItem = this.makeNewToDoListItem();
@@ -108,8 +144,8 @@ class App extends Component {//commit test
     return newItem;
   }
 
-  //used in: addNewItemTransaction
-  removeItemFromList = (itemId) => {
+  //used in: addNewItemTransaction, removeItemTransaction
+  removeItem = (itemId) => {
     let editedList = this.state.currentList.items;
     let indexToRemove = this.getIndexOfItem(editedList, itemId);
     let removedItem = editedList[indexToRemove];
@@ -119,6 +155,26 @@ class App extends Component {//commit test
       currentList: {items: editedList}
     })
     return removedItem;
+  }
+
+  //used in: removeItemTransaction
+  addReturningItem = (item, index) => {
+    let editedList = this.state.currentList.items;
+    editedList.splice(index, 0, item);
+    this.setState({
+      currentList: {items: editedList}
+    })
+  }
+
+
+  swapItemByIndex = (a, b) => {
+    let editedList = this.state.currentList.items;
+    let temp = editedList[a];
+    editedList[a] = editedList[b];
+    editedList[b] = temp;
+    this.setState({
+      currentList: {items: editedList}
+    })
   }
 
   getIndexOfItem = (searchedList, desiredItemId) => {
@@ -163,7 +219,7 @@ class App extends Component {//commit test
 
   // THIS IS A CALLBACK FUNCTION FOR AFTER AN EDIT TO A LIST
   afterToDoListsChangeComplete = () => {
-    console.log("App updated currentToDoList: " + this.state.currentList);
+    //console.log("App updated currentToDoList: " + this.state.currentList);
 
     // WILL THIS WORK? @todo
     let toDoListsString = JSON.stringify(this.state.toDoLists);
@@ -184,6 +240,10 @@ class App extends Component {//commit test
           undoCallback={this.undo}
           redoCallback={this.redo}
           addNewItemCallback={this.addNewItemTransaction}
+          closeToDoListCallback={this.closeToDoList}
+          upCallback={this.upTransaction}
+          downCallback={this.downTransaction}
+          removeItemCallback={this.removeItemTransaction}
         />
       </div>
     );

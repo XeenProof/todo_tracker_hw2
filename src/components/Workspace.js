@@ -24,6 +24,10 @@ class Workspace extends Component {
         this.props.redoCallback();
     }
 
+    handleCloseList = () => {
+        this.props.closeToDoListCallback();
+    }
+
     render() {
         return (
             <div id="workspace">
@@ -36,7 +40,7 @@ class Workspace extends Component {
                         <Redo id="redo-button" className="list-item-control material-icons todo-button" onClick={this.handleRedo}/>
                         <AddBox id="add-item-button" className="list-item-control material-icons todo-button" onClick={this.handleAddNewItem}/>
                         <Delete id="delete-list-button" className="list-item-control material-icons todo-button" />
-                        <Close id="close-list-button" className="list-item-control material-icons todo-button" />
+                        <Close id="close-list-button" className="list-item-control material-icons todo-button" onClick={this.handleCloseList}/>
                     </div>
                 </div>
                 <div id="todo-list-items-div">
@@ -45,6 +49,9 @@ class Workspace extends Component {
                         <ToDoItem
                             key={toDoListItem.id}
                             toDoListItem={toDoListItem}     // PASS THE ITEM TO THE CHILDREN
+                            upCallback={this.props.upCallback}
+                            downCallback={this.props.downCallback}
+                            removeItemCallback={this.props.removeItemCallback}
                         />))
                     }
                 </div>

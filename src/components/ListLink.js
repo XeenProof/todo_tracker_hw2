@@ -7,12 +7,12 @@ class ListLink extends Component {
         super(props);
         
         // DISPLAY WHERE WE ARE
-        console.log("\t\t\tListLink " + this.props.toDoList.key + " constructor");
+        //console.log("\t\t\tListLink " + this.props.toDoList.key + " constructor");
     }
 
     componentDidMount = () => {
         // DISPLAY WHERE WE ARE
-        console.log("\t\t\tListLink " + this.props.toDoList.key + " did mount");
+        //console.log("\t\t\tListLink " + this.props.toDoList.key + " did mount");
     }
 
     handleLoadList = () => {
@@ -21,7 +21,7 @@ class ListLink extends Component {
 
     render() {
         // DISPLAY WHERE WE ARE
-        console.log("\t\t\tListLink render");
+        //console.log("\t\t\tListLink render");
 
         return (
             <div 

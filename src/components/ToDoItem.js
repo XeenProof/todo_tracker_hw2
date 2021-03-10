@@ -9,17 +9,17 @@ class ToDoItem extends Component {
         super(props);
         
         // DISPLAY WHERE WE ARE
-        console.log("\t\t\tToDoItem " + this.props.toDoListItem.id + " constructor");
+        //console.log("\t\t\tToDoItem " + this.props.toDoListItem.id + " constructor");
     }
 
     componentDidMount = () => {
         // DISPLAY WHERE WE ARE
-        console.log("\t\t\tToDoItem " + this.props.toDoListItem.id + " did mount");
+        //console.log("\t\t\tToDoItem " + this.props.toDoListItem.id + " did mount");
     }
 
     render() {
         // DISPLAY WHERE WE ARE
-        console.log("\t\t\tToDoItem render");
+        //console.log("\t\t\tToDoItem render");
         let listItem = this.props.toDoListItem;
         let statusType = "status-complete";
         if (listItem.status === "incomplete")
@@ -32,9 +32,9 @@ class ToDoItem extends Component {
                 <div className='item-col status-col'  className={statusType}>{listItem.status}</div>
                 <div className='item-col test-4-col'></div>
                 <div className='item-col list-controls-col'>
-                    <KeyboardArrowUp className='list-item-control todo-button' onClick={this.test}/>
-                    <KeyboardArrowDown className='list-item-control todo-button' onClick={this.test}/>
-                    <Close className='list-item-control todo-button' onClick={this.wip}/>
+                    <KeyboardArrowUp className='list-item-control todo-button' onClick={this.up}/>
+                    <KeyboardArrowDown className='list-item-control todo-button' onClick={this.down}/>
+                    <Close className='list-item-control todo-button' onClick={this.removeItem}/>
                 <div className='list-item-control'></div>
                 <div className='list-item-control'></div>
                 </div>
@@ -42,8 +42,16 @@ class ToDoItem extends Component {
         )
     }
 
-    wip = () => {
-        console.log("WIP");
+    up = () => {
+        this.props.upCallback(this.props.toDoListItem);
+    }
+
+    down = () => {
+        this.props.downCallback(this.props.toDoListItem);
+    }
+
+    removeItem = () => {
+        this.props.removeItemCallback(this.props.toDoListItem);
     }
 }
 
