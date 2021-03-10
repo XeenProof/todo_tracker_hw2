@@ -101,11 +101,23 @@
 }
 
 .list-controls-col {
-    /* display: flex;
+    display: flex;
     flex-direction: row; 
-    flex-wrap: nowrap; */
+    flex-wrap: nowrap;
 }
 
 .list-item-control {
     width: 20%;
+}
+
+.task-col {
+    width:25%;
+}
+
+.due-date-col {
+    width:25%;
+}
+
+.status-col {
+    width:25%
 }

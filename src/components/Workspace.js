@@ -12,6 +12,10 @@ class Workspace extends Component {
         super(props);
     }
 
+    handleAddNewItem = () =>{
+        this.props.addNewItemCallback();
+    }
+
     render() {
         return (
             <div id="workspace">
@@ -22,7 +26,7 @@ class Workspace extends Component {
                     <div className="item-col" display="flex" flexDirection="row" flexWrap="nowrap">
                         <Undo id="undo-button" className="list-item-control material-icons todo-button" />
                         <Redo id="redo-button" className="list-item-control material-icons todo-button" />
-                        <AddBox id="add-item-button" className="list-item-control material-icons todo-button" />
+                        <AddBox id="add-item-button" className="list-item-control material-icons todo-button" onClick={this.handleAddNewItem}/>
                         <Delete id="delete-list-button" className="list-item-control material-icons todo-button" />
                         <Close id="close-list-button" className="list-item-control material-icons todo-button" />
                     </div>
@@ -33,6 +37,7 @@ class Workspace extends Component {
                         <ToDoItem
                             key={toDoListItem.id}
                             toDoListItem={toDoListItem}     // PASS THE ITEM TO THE CHILDREN
+                            passdownTest={this.props.passdownCallback}
                         />))
                     }
                 </div>

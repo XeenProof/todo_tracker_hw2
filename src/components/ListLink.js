@@ -1,6 +1,7 @@
 // IMPORT ALL THE THINGS NEEDED FROM OTHER JAVASCRIPT SOURCE FILES
 import React, { Component } from 'react'
 
+//Loads the list of different list on the left
 class ListLink extends Component {
     constructor(props) {
         super(props);
@@ -24,6 +25,7 @@ class ListLink extends Component {
 
         return (
             <div 
+                id={'todo-list-' + this.props.toDoList.id}
                 className='todo-list-button'
                 onClick={this.handleLoadList}
             >

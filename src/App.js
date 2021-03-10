@@ -66,6 +66,7 @@ class App extends Component {//commit test
       testList.id !== toDoList.id
     );
     nextLists.unshift(toDoList);
+    this.tps.clearAllTransactions();
 
     this.setState({
       toDoLists: nextLists,
@@ -73,7 +74,7 @@ class App extends Component {//commit test
     });
   }
 
-  addNewList = () => {
+  addNewList = () => {//creates a new list and sets it as current list
     let newToDoListInList = [this.makeNewToDoList()];
     let newToDoListsList = [...newToDoListInList, ...this.state.toDoLists];
     let newToDoList = newToDoListInList[0];
@@ -83,12 +84,64 @@ class App extends Component {//commit test
       toDoLists: newToDoListsList,
       currentList: newToDoList,
       nextListId: this.state.nextListId+1
-    }, this.afterToDoListsChangeComplete);
+    });//, this.afterToDoListsChangeComplete);
+  }
+
+  
+
+  //student made
+  addNewListItem = () => {
+    let newItem = this.makeNewToDoListItem();
+    let editedList = this.state.currentList.items;
+    editedList.push(newItem);
+
+    this.setState({
+      currentList: {items: editedList},
+      nextListItemId: this.state.nextListItemId+1
+    })
+    return newItem;
+  }
+
+  //student made
+  removeItemFromList = (itemId) => {
+    let editedList = this.state.currentList;
+    let indexToRemove = getIndexOfItem(editedList, itemId);
+    editedList.splice(indexToRemove,1);
+
+    this.setState({
+      currentList: {items: editedList}
+    })
+  }
+
+  getIndexOfItem = (searchedList, desiredItemId) => {
+    for (let i = 0; i < this.searchedList.length; i++){
+      if(searchedList[i].id === desiredItemId){
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  redo = () => {
+    if (this.tps.hasTransactionToRedo()) {
+        this.tps.doTransaction();
+    }
+  }  
+
+  undo = () => {
+    if (this.tps.hasTransactionToUndo()) {
+      this.tps.undoTransaction();
+    }
+  }
+
+  passDownTest = () => {
+    this.state.currentList.items[1].description = "changed";
+    console.log("passdown success" + this.state.currentList.items[1].description);
   }
 
   makeNewToDoList = () => {
     let newToDoList = {
-      id: this.highListId,
+      id: this.state.nextListId,
       name: 'Untitled',
       items: []
     };
@@ -97,6 +150,7 @@ class App extends Component {//commit test
 
   makeNewToDoListItem = () =>  {
     let newToDoListItem = {
+      id: this.state.nextListItemId,
       description: "No Description",
       dueDate: "none",
       status: "incomplete"
@@ -121,9 +175,12 @@ class App extends Component {//commit test
         <LeftSidebar 
           toDoLists={this.state.toDoLists}
           loadToDoListCallback={this.loadToDoList}
-          addNewListCallback={this.addNewList}
+          addNewListCallback={this.addNewList}//Pass to child?
         />
-        <Workspace toDoListItems={items} />
+        <Workspace toDoListItems={items} 
+          passdownCallback={this.passDownTest}
+          addNewItemCallback={this.addNewListItem}
+        />
       </div>
     );
   }
