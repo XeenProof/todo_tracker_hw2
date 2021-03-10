@@ -95,7 +95,7 @@ class App extends Component {//commit test
     this.tps.addTransaction(transaction);
   }
 
-  //student made
+  //used in: addNewItemTransaction
   addNewListItem = () => {
     let newItem = this.makeNewToDoListItem();
     let editedList = this.state.currentList.items;
@@ -108,19 +108,21 @@ class App extends Component {//commit test
     return newItem;
   }
 
-  //student made
+  //used in: addNewItemTransaction
   removeItemFromList = (itemId) => {
-    let editedList = this.state.currentList;
-    let indexToRemove = getIndexOfItem(editedList, itemId);
+    let editedList = this.state.currentList.items;
+    let indexToRemove = this.getIndexOfItem(editedList, itemId);
+    let removedItem = editedList[indexToRemove];
     editedList.splice(indexToRemove,1);
 
     this.setState({
       currentList: {items: editedList}
     })
+    return removedItem;
   }
 
   getIndexOfItem = (searchedList, desiredItemId) => {
-    for (let i = 0; i < this.searchedList.length; i++){
+    for (let i = 0; i < searchedList.length; i++){
       if(searchedList[i].id === desiredItemId){
         return i;
       }
@@ -138,11 +140,6 @@ class App extends Component {//commit test
     if (this.tps.hasTransactionToUndo()) {
       this.tps.undoTransaction();
     }
-  }
-
-  passDownTest = () => {
-    this.state.currentList.items[1].description = "changed";
-    console.log("passdown success" + this.state.currentList.items[1].description);
   }
 
   makeNewToDoList = () => {
@@ -184,7 +181,8 @@ class App extends Component {//commit test
           addNewListCallback={this.addNewList}//Pass to child?
         />
         <Workspace toDoListItems={items} 
-          passdownCallback={this.passDownTest}
+          undoCallback={this.undo}
+          redoCallback={this.redo}
           addNewItemCallback={this.addNewItemTransaction}
         />
       </div>

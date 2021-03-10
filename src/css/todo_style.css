@@ -92,6 +92,7 @@
 }
 
 .todo-button:hover {
+    /* background-color: yellow; */
     background-color: var(--swatch-contrast);
 }
 

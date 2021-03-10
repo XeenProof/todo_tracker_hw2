@@ -24,7 +24,7 @@ class ToDoItem extends Component {
         let statusType = "status-complete";
         if (listItem.status === "incomplete")
             statusType = "status-incomplete";
-        
+
         return (
             <div id={'todo-list-item-' + listItem.id} className='list-item-card'>
                 <div className='item-col task-col'>{listItem.description}</div>
@@ -34,7 +34,7 @@ class ToDoItem extends Component {
                 <div className='item-col list-controls-col'>
                     <KeyboardArrowUp className='list-item-control todo-button' onClick={this.test}/>
                     <KeyboardArrowDown className='list-item-control todo-button' onClick={this.test}/>
-                    <Close className='list-item-control todo-button' onClick={this.test}/>
+                    <Close className='list-item-control todo-button' onClick={this.wip}/>
                 <div className='list-item-control'></div>
                 <div className='list-item-control'></div>
                 </div>
@@ -42,9 +42,8 @@ class ToDoItem extends Component {
         )
     }
 
-    test = () => {
-        //console.log("clicking worked");
-        this.props.passdownTest();
+    wip = () => {
+        console.log("WIP");
     }
 }
 
