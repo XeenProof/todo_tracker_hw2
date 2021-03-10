@@ -3,6 +3,9 @@ import React, { Component } from 'react';
 import testData from './test/testData.json'
 import jsTPS from './common/jsTPS'
 
+// IMPORTING TRANSACTIONS
+import AddNewItem_Transaction from './transactions/AddNewItem_Transaction.js'
+
 // THESE ARE OUR REACT COMPONENTS
 import Navbar from './components/Navbar'
 import LeftSidebar from './components/LeftSidebar'
@@ -87,7 +90,10 @@ class App extends Component {//commit test
     });//, this.afterToDoListsChangeComplete);
   }
 
-  
+  addNewItemTransaction = () => {
+    let transaction = new AddNewItem_Transaction(this);
+    this.tps.addTransaction(transaction);
+  }
 
   //student made
   addNewListItem = () => {
@@ -179,7 +185,7 @@ class App extends Component {//commit test
         />
         <Workspace toDoListItems={items} 
           passdownCallback={this.passDownTest}
-          addNewItemCallback={this.addNewListItem}
+          addNewItemCallback={this.addNewItemTransaction}
         />
       </div>
     );
