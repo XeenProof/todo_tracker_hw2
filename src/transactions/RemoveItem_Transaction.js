@@ -14,7 +14,7 @@ export default class RemoveItem_Transaction extends jsTPS_Transaction {
     }
 
     doTransaction() {
-        this.app.removeItem(this.itemToRemove.id);
+        this.app.removeItem(this.itemToRemove);
     }
 
     undoTransaction() {

@@ -31,7 +31,7 @@ class Workspace extends Component {
     render() {
         return (
             <div id="workspace">
-                <div id="todo-list-header-card" className="list-item-card">
+                <div id="todo-list-header-card" className="list-item-card todo-button">
                     <div id="task-col-header" className="item-col todo-button">Task</div>
                     <div id="date-col-header" className="item-col todo-button">Due Date</div>
                     <div id="status-col-header" className="item-col todo-button">Status</div>
@@ -43,7 +43,7 @@ class Workspace extends Component {
                         <Close id="close-list-button" className="list-item-control material-icons todo-button" onClick={this.handleCloseList}/>
                     </div>
                 </div>
-                <div id="todo-list-items-div">
+                <div id="todo-list-items-div" className= "list-item-card">
                     {
                         this.props.toDoListItems.map((toDoListItem) => (
                         <ToDoItem
@@ -52,6 +52,7 @@ class Workspace extends Component {
                             upCallback={this.props.upCallback}
                             downCallback={this.props.downCallback}
                             removeItemCallback={this.props.removeItemCallback}
+                            editTextCallback={this.props.editTextCallback}
                         />))
                     }
                 </div>

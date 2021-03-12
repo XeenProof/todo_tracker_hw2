@@ -78,14 +78,14 @@ class App extends Component {//commit test
       toDoLists: nextLists,
       currentList: toDoList,
       listLoaded: true
-    });
+    }, this.afterToDoListsChangeComplete);
   }
 
   closeToDoList = () => {
     this.setState({
       currentList: {items: []},
       listLoaded: false
-    })
+    }, this.afterToDoListsChangeComplete);
   }
 
   addNewList = () => {//creates a new list and sets it as current list
@@ -98,10 +98,13 @@ class App extends Component {//commit test
       toDoLists: newToDoListsList,
       currentList: newToDoList,
       nextListId: this.state.nextListId+1
-    });//, this.afterToDoListsChangeComplete);
+    }, this.afterToDoListsChangeComplete);
   }
 
   addNewItemTransaction = () => {
+    if(this.state.listLoaded === false){
+      return;
+    }
     let transaction = new AddNewItem_Transaction(this);
     this.tps.addTransaction(transaction);
   }
@@ -113,20 +116,19 @@ class App extends Component {//commit test
   }
 
   upTransaction = (item) => {
-    // if(this.getIndexOfItem(item)-1 < 0){
-    //   return;
-    // }
-    
     let index = this.getIndexOfItem(this.state.currentList.items, item.id);
+    if(index-1 < 0){
+      return;
+    }
     let transaction = new Move_Transaction(this, index, index-1);
     this.tps.addTransaction(transaction);
   }
 
   downTransaction = (item) => {
-    // if(this.getIndexOfItem(item)+1 >= this.state.currentList.items.length()){
-    //     return;
-    // }
     let index = this.getIndexOfItem(this.state.currentList.items, item.id);
+    if(index+1 >= this.state.currentList.items.length){
+      return;
+    }
     let transaction = new Move_Transaction(this, index, index+1);
     this.tps.addTransaction(transaction);
   }
@@ -134,47 +136,89 @@ class App extends Component {//commit test
   //used in: addNewItemTransaction
   addNewListItem = () => {
     let newItem = this.makeNewToDoListItem();
-    let editedList = this.state.currentList.items;
-    editedList.push(newItem);
+    let toDoLists = this.state.toDoLists;
+    let currentList = this.state.currentList;
+    let itemList = this.state.currentList.items;
+    itemList.push(newItem);
+
+    let newCurrentList = {id: currentList.id, name: currentList.name, items: itemList};
+    toDoLists.splice(0,1, newCurrentList);
 
     this.setState({
-      currentList: {items: editedList},
+      toDoLists: toDoLists,
+      currentList: toDoLists[0],
       nextListItemId: this.state.nextListItemId+1
-    })
+    }, this.afterToDoListsChangeComplete);
     return newItem;
   }
 
   //used in: addNewItemTransaction, removeItemTransaction
-  removeItem = (itemId) => {
-    let editedList = this.state.currentList.items;
-    let indexToRemove = this.getIndexOfItem(editedList, itemId);
-    let removedItem = editedList[indexToRemove];
-    editedList.splice(indexToRemove,1);
+  removeItem = (item) => {
+    let itemList = this.state.currentList.items.filter((listItem) => 
+      listItem !== item
+    );
+
+    let toDoLists = this.state.toDoLists;
+    let currentList = this.state.currentList;
+    let newCurrentList = {id: currentList.id, name: currentList.name, items: itemList};
+    toDoLists.splice(0,1, newCurrentList);
 
     this.setState({
-      currentList: {items: editedList}
-    })
-    return removedItem;
+      toDoLists: toDoLists,
+      currentList: toDoLists[0]
+    }, this.afterToDoListsChangeComplete);
+    return item;
   }
 
   //used in: removeItemTransaction
   addReturningItem = (item, index) => {
-    let editedList = this.state.currentList.items;
-    editedList.splice(index, 0, item);
+    let itemList = this.state.currentList.items;
+    itemList.splice(index, 0, item);
+
+    let toDoLists = this.state.toDoLists;
+    let currentList = this.state.currentList;
+    let newCurrentList = {id: currentList.id, name: currentList.name, items: itemList};
+    toDoLists.splice(0,1, newCurrentList);
+
     this.setState({
-      currentList: {items: editedList}
-    })
+      toDoLists: toDoLists,
+      currentList: toDoLists[0]
+    }, this.afterToDoListsChangeComplete);
   }
 
 
   swapItemByIndex = (a, b) => {
-    let editedList = this.state.currentList.items;
-    let temp = editedList[a];
-    editedList[a] = editedList[b];
-    editedList[b] = temp;
+    let itemList = this.state.currentList.items;
+    let temp = itemList[a];
+    itemList[a] = itemList[b];
+    itemList[b] = temp;
+
+    let toDoLists = this.state.toDoLists;
+    let currentList = this.state.currentList;
+    let newCurrentList = {id: currentList.id, name: currentList.name, items: itemList};
+    toDoLists.splice(0,1, newCurrentList);
+
     this.setState({
-      currentList: {items: editedList}
-    })
+      toDoLists: toDoLists,
+      currentList: toDoLists[0]
+    }, this.afterToDoListsChangeComplete);
+  }
+
+  editItemText = (item, newText) => {
+    console.log(item.due_date);
+    let newItem = {id: item.id, description: newText, due_date: item.due_date, status: item.status}
+    let itemList = this.state.currentList.items;
+    itemList.splice(this.getIndexOfItem(itemList, item.id), 1, newItem);
+    
+    let toDoLists = this.state.toDoLists;
+    let currentList = this.state.currentList;
+    let newCurrentList = {id: currentList.id, name: currentList.name, items: itemList};
+    toDoLists.splice(0,1, newCurrentList);
+
+    this.setState({
+      toDoLists: toDoLists,
+      currentList: toDoLists[0]
+    }, this.afterToDoListsChangeComplete);
   }
 
   getIndexOfItem = (searchedList, desiredItemId) => {
@@ -211,7 +255,7 @@ class App extends Component {//commit test
     let newToDoListItem = {
       id: this.state.nextListItemId,
       description: "No Description",
-      dueDate: "none",
+      due_date: "none",
       status: "incomplete"
     };
     return newToDoListItem;
@@ -219,11 +263,10 @@ class App extends Component {//commit test
 
   // THIS IS A CALLBACK FUNCTION FOR AFTER AN EDIT TO A LIST
   afterToDoListsChangeComplete = () => {
-    //console.log("App updated currentToDoList: " + this.state.currentList);
-
+    console.log("App updated currentToDoList: " + this.state.currentList);
     // WILL THIS WORK? @todo
     let toDoListsString = JSON.stringify(this.state.toDoLists);
-    localStorage.setItem("recent_work", toDoListsString);
+    localStorage.setItem("recentLists", toDoListsString);
   }
 
   render() {
@@ -244,6 +287,7 @@ class App extends Component {//commit test
           upCallback={this.upTransaction}
           downCallback={this.downTransaction}
           removeItemCallback={this.removeItemTransaction}
+          editTextCallback={this.editItemText}
         />
       </div>
     );
