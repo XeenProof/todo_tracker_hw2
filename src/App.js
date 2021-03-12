@@ -271,6 +271,18 @@ class App extends Component {//commit test
     }, this.afterToDoListsChangeComplete);
   }
 
+  editListName = (list, newName) => {
+    let newList = {id: list.id, name: newName, items: list.items}
+    let toDoLists = this.state.toDoLists;
+    let index = this.getIndexOfItem(toDoLists, newList.id);
+    toDoLists.splice(index,1,newList);
+
+    this.setState({
+      toDoLists: toDoLists,
+      currentList: toDoLists[0]
+    }, this.afterToDoListsChangeComplete);
+  }
+
   getIndexOfItem = (searchedList, desiredItemId) => {
     for (let i = 0; i < searchedList.length; i++){
       if(searchedList[i].id === desiredItemId){
@@ -328,6 +340,7 @@ class App extends Component {//commit test
           toDoLists={this.state.toDoLists}
           loadToDoListCallback={this.loadToDoList}
           addNewListCallback={this.addNewList}//Pass to child?
+          editListNameCallback={this.editListName}
         />
         <Workspace toDoListItems={items} 
           undoCallback={this.undo}

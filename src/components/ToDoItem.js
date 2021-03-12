@@ -35,10 +35,10 @@ class ToDoItem extends Component {
                 {(this.state.editText)? <input type="text" id={'todo-item-' + listItem.id + 'text'} className='text-display todo-button' onChange={this.textEditChange} onBlur={this.textEditComplete} autoFocus={true} value={listItem.description}></input>: 
                 <div className='text-display todo-button' onClick={this.textEdit}>{listItem.description}</div>}
 
-                {(this.state.editDate)? <input type="date" className='text-display todo-button' onBlur={this.dateEditComplete} onChange={(e) => this.dateEditChange(e)} autoFocus={true} value={listItem.due_date}></input>:
+                {(this.state.editDate)? <input type="date" className='text-display todo-button' onBlur={this.dateEditComplete} onChange={this.dateEditChange} autoFocus={true} value={listItem.due_date}></input>:
                 <div className='text-display todo-button' onClick={this.dateEdit}>{listItem.due_date}</div>}
 
-                {(this.state.editStatus)?<select className='text-display todo-button' onBlur={this.statusEditComplete} onChange={(e) => this.statusEditChange(e)}>
+                {(this.state.editStatus)?<select className='text-display todo-button' onBlur={this.statusEditComplete} onChange={this.statusEditChange}>
                         <option className="status-complete" value="complete">complete</option>
                         <option className="status-incomplete" value="incomplete">incomplete</option>
                     </select>:
@@ -75,9 +75,9 @@ class ToDoItem extends Component {
     }
 
     textEditComplete = () => {
-        let input = document.getElementById('todo-item-' + this.props.toDoListItem.id + 'text');
-        let value = input.value;
-        this.props.editTextCallback(this.props.toDoListItem, value);
+        // let input = document.getElementById('todo-item-' + this.props.toDoListItem.id + 'text');
+        // let value = input.value;
+        // this.props.editTextCallback(this.props.toDoListItem, value);
         this.setState({
             editText: false
         });

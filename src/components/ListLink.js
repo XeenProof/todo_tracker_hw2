@@ -8,6 +8,9 @@ class ListLink extends Component {
         
         // DISPLAY WHERE WE ARE
         //console.log("\t\t\tListLink " + this.props.toDoList.key + " constructor");
+        this.state = {
+            editName: false
+        }
     }
 
     componentDidMount = () => {
@@ -24,14 +27,39 @@ class ListLink extends Component {
         //console.log("\t\t\tListLink render");
 
         return (
+            (this.state.editName)?<input 
+                id={'todo-list-' + this.props.toDoList.id} 
+                className='todo-list-button' 
+                autoFocus={true}
+                value={this.props.toDoList.name}
+                onBlur={this.editNameComplete}
+                onChange={this.editNameChange}
+            ></input>:
             <div 
                 id={'todo-list-' + this.props.toDoList.id}
                 className='todo-list-button'
                 onClick={this.handleLoadList}
+                onDoubleClick={this.editName}
             >
                 {this.props.toDoList.name}<br />
             </div>
-        )
+        );
+    }
+
+    editName = () => {
+        this.setState({
+            editName: true
+        });
+    }
+
+    editNameComplete = () => {
+        this.setState({
+            editName: false
+        });
+    }
+
+    editNameChange = (event) => {
+        this.props.editListNameCallback(this.props.toDoList, event.target.value);
     }
 }
 
