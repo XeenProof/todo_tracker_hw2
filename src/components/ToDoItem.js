@@ -84,9 +84,6 @@ class ToDoItem extends Component {
     textEditChange = (event) => {
         console.log(this.props.toDoListItem);
         this.props.editTextCallback(this.props.toDoListItem, event.target.value);
-        // this.setState({
-        //     editText: false
-        // });
     }
 
     dateEdit = () => {
@@ -103,9 +100,6 @@ class ToDoItem extends Component {
 
     dateEditChange = (event) => {
         //edit background here
-        this.setState({
-            editDate: false
-        });
     }
 
     statusEdit = () => {
@@ -122,9 +116,6 @@ class ToDoItem extends Component {
 
     statusEditChange = (event) => {
         //edit background here
-        this.setState({
-            editStatus: false
-        });
     }
 }
 
