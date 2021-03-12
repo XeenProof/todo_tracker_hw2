@@ -7,6 +7,9 @@ import jsTPS from './common/jsTPS'
 import AddNewItem_Transaction from './transactions/AddNewItem_Transaction.js'
 import RemoveItem_Transaction from './transactions/RemoveItem_Transaction.js'
 import Move_Transaction from './transactions/Move_Transaction.js'
+import Text_Transaction from './transactions/Text_Transaction.js'
+import Date_Transaction from './transactions/Date_Transaction.js'
+import Status_Transaction from './transactions/Status_Transaction.js'
 
 // THESE ARE OUR REACT COMPONENTS
 import Navbar from './components/Navbar'
@@ -133,6 +136,21 @@ class App extends Component {//commit test
     this.tps.addTransaction(transaction);
   }
 
+  textTransaction = (item, newText) => {
+    let transaction = new Text_Transaction(this, item, newText);
+    this.tps.addTransaction(transaction);
+  }
+
+  dateTransaction = (item, newDate) => {
+    let transaction = new Date_Transaction(this, item, newDate);
+    this.tps.addTransaction(transaction);
+  }
+
+  statusTransaction = (item, newStatus) => {
+    let transaction = new Status_Transaction(this, item, newStatus);
+    this.tps.addTransaction(transaction);
+  }
+
   //used in: addNewItemTransaction
   addNewListItem = () => {
     let newItem = this.makeNewToDoListItem();
@@ -221,6 +239,38 @@ class App extends Component {//commit test
     }, this.afterToDoListsChangeComplete);
   }
 
+  editItemDate = (item, newDate) => {
+    let newItem = {id: item.id, description: item.description, due_date: newDate, status: item.status}
+    let itemList = this.state.currentList.items;
+    itemList.splice(this.getIndexOfItem(itemList, item.id), 1, newItem);
+    
+    let toDoLists = this.state.toDoLists;
+    let currentList = this.state.currentList;
+    let newCurrentList = {id: currentList.id, name: currentList.name, items: itemList};
+    toDoLists.splice(0,1, newCurrentList);
+
+    this.setState({
+      toDoLists: toDoLists,
+      currentList: toDoLists[0]
+    }, this.afterToDoListsChangeComplete);
+  }
+
+  editItemStatus = (item, newStatus) => {
+    let newItem = {id: item.id, description: item.description, due_date: item.due_date, status: newStatus}
+    let itemList = this.state.currentList.items;
+    itemList.splice(this.getIndexOfItem(itemList, item.id), 1, newItem);
+    
+    let toDoLists = this.state.toDoLists;
+    let currentList = this.state.currentList;
+    let newCurrentList = {id: currentList.id, name: currentList.name, items: itemList};
+    toDoLists.splice(0,1, newCurrentList);
+
+    this.setState({
+      toDoLists: toDoLists,
+      currentList: toDoLists[0]
+    }, this.afterToDoListsChangeComplete);
+  }
+
   getIndexOfItem = (searchedList, desiredItemId) => {
     for (let i = 0; i < searchedList.length; i++){
       if(searchedList[i].id === desiredItemId){
@@ -287,7 +337,9 @@ class App extends Component {//commit test
           upCallback={this.upTransaction}
           downCallback={this.downTransaction}
           removeItemCallback={this.removeItemTransaction}
-          editTextCallback={this.editItemText}
+          editTextCallback={this.textTransaction}
+          editDateCallback={this.dateTransaction}
+          editStatusCallback={this.statusTransaction}
         />
       </div>
     );

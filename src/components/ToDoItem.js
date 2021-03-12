@@ -32,7 +32,7 @@ class ToDoItem extends Component {
 
         return (
             <div id={'todo-list-item-' + listItem.id} className='list-item-card todo-button test'>
-                {(this.state.editText)? <input type="text" className='text-display todo-button' onChange={(e) => this.textEditChange(e)} onBlur={this.textEditComplete} autoFocus={true} value={listItem.description}></input>: 
+                {(this.state.editText)? <input type="text" id={'todo-item-' + listItem.id + 'text'} className='text-display todo-button' onChange={this.textEditChange} onBlur={this.textEditComplete} autoFocus={true} value={listItem.description}></input>: 
                 <div className='text-display todo-button' onClick={this.textEdit}>{listItem.description}</div>}
 
                 {(this.state.editDate)? <input type="date" className='text-display todo-button' onBlur={this.dateEditComplete} onChange={(e) => this.dateEditChange(e)} autoFocus={true} value={listItem.due_date}></input>:
@@ -74,8 +74,10 @@ class ToDoItem extends Component {
         });
     }
 
-    textEditComplete = (event) => {
-        console.log(event.target.value);
+    textEditComplete = () => {
+        let input = document.getElementById('todo-item-' + this.props.toDoListItem.id + 'text');
+        let value = input.value;
+        this.props.editTextCallback(this.props.toDoListItem, value);
         this.setState({
             editText: false
         });
@@ -83,6 +85,9 @@ class ToDoItem extends Component {
 
     textEditChange = (event) => {
         console.log(this.props.toDoListItem);
+        // let input = document.getElementById('todo-item-' + this.props.toDoListItem.id + 'text');
+        // let value = input.value;
+        // this.props.editTextCallback(this.props.toDoListItem, value);
         this.props.editTextCallback(this.props.toDoListItem, event.target.value);
     }
 
@@ -99,7 +104,7 @@ class ToDoItem extends Component {
     }
 
     dateEditChange = (event) => {
-        //edit background here
+        this.props.editDateCallback(this.props.toDoListItem, event.target.value);
     }
 
     statusEdit = () => {
@@ -115,7 +120,7 @@ class ToDoItem extends Component {
     }
 
     statusEditChange = (event) => {
-        //edit background here
+        this.props.editStatusCallback(this.props.toDoListItem, event.target.value);
     }
 }
 

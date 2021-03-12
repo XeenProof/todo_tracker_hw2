@@ -5,19 +5,19 @@ import { jsTPS_Transaction } from "../common/jsTPS.js"
 
 // THIS TRANSACTION IS FOR ADDING A NEW ITEM TO A TODO LIST
 export default class Text_Transaction extends jsTPS_Transaction {
-    constructor(initModel, item, newStatus) {
+    constructor(initApp, item, newStatus) {
         super();
-        this.model = initModel;
+        this.app = initApp;
         this.newStatus = newStatus;
         this.item = item;
-        this.oldStatus = item.getStatus();
+        this.oldStatus = item.status;
     }
 
     doTransaction() {
-        this.model.editStatus(this.item, this.newStatus);
+        this.app.editItemStatus(this.item, this.newStatus);
     }
 
     undoTransaction() {
-        this.model.editStatus(this.item, this.oldStatus);
+        this.app.editItemStatus(this.item, this.oldStatus);
     }
 }

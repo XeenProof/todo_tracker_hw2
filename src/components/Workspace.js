@@ -53,6 +53,8 @@ class Workspace extends Component {
                             downCallback={this.props.downCallback}
                             removeItemCallback={this.props.removeItemCallback}
                             editTextCallback={this.props.editTextCallback}
+                            editDateCallback={this.props.editDateCallback}
+                            editStatusCallback={this.props.editStatusCallback}
                         />))
                     }
                 </div>
