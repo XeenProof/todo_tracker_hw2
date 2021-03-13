@@ -115,3 +115,39 @@
 #add-item-button, #delete-list-button, #close-list-button {
     text-align: center;
 }
+
+.modal_button {
+    cursor:pointer;
+    background-color: var(--swatch-contrast);
+}
+
+.modal_button:hover {
+    /* color:green */
+    background-color: var(--swatch-complement);
+}
+
+.modal {
+    color: white;
+    background-color: black;
+    border-radius: 3px;
+}
+
+.header {
+    border-bottom: 2px dotted;
+    color: var(--light-gray);
+}
+
+.modal-overlay {
+    background-color: rgba(0,0,0,0.4);
+}
+
+.item-button{
+    cursor:pointer;
+    background-color: var(--swatch-complement);
+    font-family: var(--font-primary);
+    color:white
+}
+
+.item-button:hover{
+    background-color: var(--swatch-contrast);
+}

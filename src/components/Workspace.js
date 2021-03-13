@@ -28,19 +28,36 @@ class Workspace extends Component {
         this.props.closeToDoListCallback();
     }
 
+    handleButtonPress = (event) => {
+        if (event.key == '2'){
+            this.handleUndo()
+        }
+        else if (event.key == '1'){
+            this.handleRedo()
+        }
+    }
+
+    handleDeleteList = () => {
+        this.props.deleteListCallback();
+    }
+
     render() {
+        let undoVis = (this.props.hasUndoBoolean && this.props.listLoadedBoolean)?"visible":"hidden";
+        let redoVis = (this.props.hasRedoBoolean && this.props.listLoadedBoolean)?"visible":"hidden";
+        let ListLoaded = (this.props.listLoadedBoolean)?"visiable":"hidden";
+
         return (
-            <div id="workspace">
+            <div id="workspace" onkeypress={this.handleButtonPress}>
                 <div id="todo-list-header-card" className="list-item-card todo-button">
                     <div id="task-col-header" className="item-col todo-button">Task</div>
                     <div id="date-col-header" className="item-col todo-button">Due Date</div>
                     <div id="status-col-header" className="item-col todo-button">Status</div>
                     <div className="item-col" display="flex" flexDirection="row" flexWrap="nowrap">
-                        <Undo id="undo-button" className="list-item-control material-icons todo-button" onClick={this.handleUndo}/>
-                        <Redo id="redo-button" className="list-item-control material-icons todo-button" onClick={this.handleRedo}/>
-                        <AddBox id="add-item-button" className="list-item-control material-icons todo-button" onClick={this.handleAddNewItem}/>
-                        <Delete id="delete-list-button" className="list-item-control material-icons todo-button" />
-                        <Close id="close-list-button" className="list-item-control material-icons todo-button" onClick={this.handleCloseList}/>
+                        <Undo id="undo-button" className="list-item-control material-icons todo-button" visibility={undoVis} onClick={this.handleUndo} onkeypress={this.handleButtonPress}/>
+                        <Redo id="redo-button" className="list-item-control material-icons todo-button" visibility={redoVis} onClick={this.handleRedo} onkeypress={this.handleButtonPress}/>
+                        <AddBox id="add-item-button" className="list-item-control material-icons todo-button" visibility={ListLoaded} onClick={this.handleAddNewItem}/>
+                        <Delete id="delete-list-button" className="list-item-control material-icons todo-button" visibility={ListLoaded} onClick={this.handleDeleteList}/>
+                        <Close id="close-list-button" className="list-item-control material-icons todo-button" visibility={ListLoaded} onClick={this.handleCloseList}/>
                     </div>
                 </div>
                 <div id="todo-list-items-div" className= "list-item-card">
@@ -55,6 +72,8 @@ class Workspace extends Component {
                             editTextCallback={this.props.editTextCallback}
                             editDateCallback={this.props.editDateCallback}
                             editStatusCallback={this.props.editStatusCallback}
+                            canMoveUpBoolean={this.props.canMoveUpBoolean}
+                            canMoveDownBoolean={this.props.canMoveDownBoolean}
                         />))
                     }
                 </div>

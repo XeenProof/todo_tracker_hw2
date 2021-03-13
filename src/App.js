@@ -54,6 +54,7 @@ class App extends Component {//commit test
       }
     };
 
+
     // SETUP OUR APP STATE
     this.state = {
       toDoLists: recentLists,
@@ -61,7 +62,8 @@ class App extends Component {//commit test
       nextListId: highListId+1,
       nextListItemId: highListItemId+1,
       useVerboseFeedback: true,
-      listLoaded: false
+      listLoaded: false,
+      modal: false
     }
   }
   //constructor ends here
@@ -86,6 +88,7 @@ class App extends Component {//commit test
 
   closeToDoList = () => {
     this.setState({
+      toDoLists: this.state.toDoLists,
       currentList: {items: []},
       listLoaded: false
     }, this.afterToDoListsChangeComplete);
@@ -100,7 +103,8 @@ class App extends Component {//commit test
     this.setState({
       toDoLists: newToDoListsList,
       currentList: newToDoList,
-      nextListId: this.state.nextListId+1
+      nextListId: this.state.nextListId+1,
+      listLoaded: true
     }, this.afterToDoListsChangeComplete);
   }
 
@@ -355,10 +359,43 @@ class App extends Component {//commit test
     localStorage.setItem("recentLists", toDoListsString);
   }
 
+  getConformation = () =>{
+    this.setState({
+      modal: true
+    }, this.afterToDoListsChangeComplete);
+  }
+
+  deleteListConfirmed = () =>{
+    let listToDelete = this.state.currentList;
+    let toDoLists = this.state.toDoLists.filter((list) => list !== listToDelete);
+    this.setState({
+      toDoLists: toDoLists,
+      currentList: {items: []},
+      listLoaded: false,
+      modal: false
+    }, this.afterToDoListsChangeComplete);
+  }
+
+  deleteListCanceled = () =>{
+    this.setState({
+      modal: false
+    }, this.afterToDoListsChangeComplete);
+  }
+
+  canMoveUp = (item) =>{
+    let index = this.getIndexOfItem(this.state.currentList.items, item.id);
+    return (index != 0);
+  }
+
+  canMoveDown = (item) =>{
+    let index = this.getIndexOfItem(this.state.currentList.items, item.id);
+    return (index != this.state.currentList.items.length-1);
+  }
+
   render() {
     let items = this.state.currentList.items;
     return (
-      <div id="root">
+      <div id="App">
         <Navbar />
         <LeftSidebar 
           toDoLists={this.state.toDoLists}
@@ -377,7 +414,25 @@ class App extends Component {//commit test
           editTextCallback={this.textTransaction}
           editDateCallback={this.dateTransaction}
           editStatusCallback={this.statusTransaction}
+          deleteListCallback={this.getConformation}
+          hasUndoBoolean={this.tps.hasTransactionToUndo()}
+          hasRedoBoolean={this.tps.hasTransactionToRedo()}
+          listLoadedBoolean={this.state.listLoaded}
+          canMoveUpBoolean={this.canMoveUp}
+          canMoveDownBoolean={this.canMoveDown}
         />
+        {(this.state.modal)?
+        <div className="modal-overlay">
+          <div className="modal">
+            <div className="modal-header header">
+              <h3>Delete List?</h3>
+            </div>
+            <div className="modal-header">
+              <div className="modal_button" onClick={this.deleteListConfirmed}>Confirm</div>
+              <div className="modal_button" onClick={this.deleteListCanceled}>Cancel</div>
+            </div>
+          </div>
+        </div>:""}
       </div>
     );
   }
