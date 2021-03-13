@@ -136,7 +136,14 @@ class App extends Component {//commit test
     this.tps.addTransaction(transaction);
   }
 
-  textTransaction = (item, newText) => {
+  textTransaction = (/*oldItem, newItem*/item, newText) => {
+    //let transaction = new Text_Transaction(this, oldItem, newItem);
+    //this.tps.addTransaction(transaction);
+
+    // console.log("Transaction")
+    if (newText == item.description){
+      return;
+    }
     let transaction = new Text_Transaction(this, item, newText);
     this.tps.addTransaction(transaction);
   }
@@ -222,8 +229,25 @@ class App extends Component {//commit test
     }, this.afterToDoListsChangeComplete);
   }
 
+  editItem = (newItem) => {
+    //console.log(newItem);
+    let itemList = this.state.currentList.items;
+    let index = this.getIndexOfItem(itemList, newItem.id);
+    itemList.splice(index, 1, newItem);
+
+    let toDoLists = this.state.toDoLists;
+    let currentList = this.state.currentList;
+    let newCurrentList = {id: currentList.id, name: currentList.name, items: itemList};
+    toDoLists.splice(0,1, newCurrentList);
+
+    this.setState({
+      toDoLists: toDoLists,
+      currentList: toDoLists[0]
+    }, this.afterToDoListsChangeComplete);
+  }
+
   editItemText = (item, newText) => {
-    console.log(item.due_date);
+    console.log("text edited: " + newText);
     let newItem = {id: item.id, description: newText, due_date: item.due_date, status: item.status}
     let itemList = this.state.currentList.items;
     itemList.splice(this.getIndexOfItem(itemList, item.id), 1, newItem);
@@ -325,7 +349,7 @@ class App extends Component {//commit test
 
   // THIS IS A CALLBACK FUNCTION FOR AFTER AN EDIT TO A LIST
   afterToDoListsChangeComplete = () => {
-    console.log("App updated currentToDoList: " + this.state.currentList);
+    //console.log("App updated currentToDoList: " + this.state.currentList);
     // WILL THIS WORK? @todo
     let toDoListsString = JSON.stringify(this.state.toDoLists);
     localStorage.setItem("recentLists", toDoListsString);
