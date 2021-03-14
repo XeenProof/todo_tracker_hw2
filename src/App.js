@@ -392,6 +392,10 @@ class App extends Component {//commit test
     return (index != this.state.currentList.items.length-1);
   }
 
+  isCurrentList = (list) => {
+    return (list.id == this.state.currentList.id);
+  }
+
   render() {
     let items = this.state.currentList.items;
     return (
@@ -402,6 +406,7 @@ class App extends Component {//commit test
           loadToDoListCallback={this.loadToDoList}
           addNewListCallback={this.addNewList}//Pass to child?
           editListNameCallback={this.editListName}
+          currentListBoolean={this.isCurrentList}
         />
         <Workspace toDoListItems={items} 
           undoCallback={this.undo}

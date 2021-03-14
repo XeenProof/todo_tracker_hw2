@@ -28,33 +28,32 @@ class ToDoItem extends Component {
         // DISPLAY WHERE WE ARE
         //console.log("\t\t\tToDoItem render");
         let listItem = this.props.toDoListItem;
-        let statusType = "item-col text-display item-button status-complete";
+        let statusType = "item-col text-display status-complete";
         if (listItem.status === "incomplete")
-            statusType = "item-col text-display item-button status-incomplete";
+            statusType = "item-col text-display status-incomplete";
         let upVis = (this.props.canMoveUpBoolean(listItem))?"visiable":"hidden";
         let downVis = (this.props.canMoveDownBoolean(listItem))?"visiable":"hidden";
 
         return (
-            <div id={'todo-list-item-' + listItem.id} className='item-col list-item-card test item-button'>
-                {(this.state.editText)? <input type="text" id={'todo-item-' + listItem.id + 'text'} className='item-col text-display item-button' onChange={this.textEditChange} onBlur={this.textEditComplete} autoFocus={true} value={this.state.text}></input>: 
-                <div className='item-col text-display item-button' onClick={this.textEdit}>{listItem.description}</div>}
+            <div id={'todo-list-item-' + listItem.id} className='full-item-col list-item-card width item-row-button'>
+                {(this.state.editText)? <input type="text" id={'todo-item-' + listItem.id + 'text'} className='item-col list-input-card text-display item-button body-text-font' onChange={this.textEditChange} onBlur={this.textEditComplete} autoFocus={true} value={this.state.text}></input>: 
+                <h4 className='item-col text-display body-text-font' onClick={this.textEdit}>{listItem.description}</h4>}
 
-                {(this.state.editDate)? <input type="date" className='item-col text-display item-button' onBlur={this.dateEditComplete} onChange={this.dateEditChange} autoFocus={true} value={listItem.due_date}></input>:
-                <div className='item-col text-display item-button' onClick={this.dateEdit}>{listItem.due_date}</div>}
+                {(this.state.editDate)? <input type="date" className='item-col list-input-card text-display body-text-font' onBlur={this.dateEditComplete} onChange={this.dateEditChange} autoFocus={true} value={listItem.due_date}></input>:
+                <h4 className='item-col text-display body-text-font' onClick={this.dateEdit}>{listItem.due_date}</h4>}
 
-                {(this.state.editStatus)?<select className='item-col text-display item-button' onBlur={this.statusEditComplete} onChange={this.statusEditChange} autoFocus={true}>
+                {(this.state.editStatus)?<select className='item-col list-input-card text-display body-text-font' onBlur={this.statusEditComplete} onChange={this.statusEditChange} autoFocus={true}>
                         <option className="status-complete" value="complete">complete</option>
                         <option className="status-incomplete" value="incomplete">incomplete</option>
                     </select>:
-                <div className={statusType} onClick={this.statusEdit}>{listItem.status}</div>}
+                <h4 className={statusType} onClick={this.statusEdit}>{listItem.status}</h4>}
 
 
-                <div className='item-col list-controls-col item-button'>
-                    <KeyboardArrowUp className='list-item-control item-button' visibility={upVis} onClick={this.up}/>
-                    <KeyboardArrowDown className='list-item-control item-button' visibility={downVis} onClick={this.down}/>
-                    <Close className='list-item-control item-button' onClick={this.removeItem}/>
-                <div className='list-item-control'></div>
-                <div className='list-item-control'></div>
+                <div className='item-col list-controls-col'>
+                    <KeyboardArrowUp className='list-item-control' visibility={upVis} onClick={this.up}/>
+                    <KeyboardArrowDown className='list-item-control' visibility={downVis} onClick={this.down}/>
+                    <Close className='list-item-control' onClick={this.removeItem}/>
+                
                 </div>
             </div>
         )

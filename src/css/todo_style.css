@@ -62,7 +62,7 @@
 }
 
 .list-header-card {
-    border-bottom: dotted;
+    /*border-bottom: dotted*/;
 }
 
 .list-item-control {
@@ -75,6 +75,11 @@
     font-weight: bold;
 }
 
+.list-input-card {
+    background: transparent;
+    font-weight: bold;
+}
+
 .todo-list-button {
     cursor:pointer;
     background-color: var(--swatch-complement);
@@ -83,10 +88,11 @@
 
 .todo-list-button:hover {
     background-color: var(--swatch-contrast);
+    color:white;
 }
 
 .todo-button {
-    cursor:pointer;
+    /*cursor:pointer*/;
     background-color: var(--swatch-complement);
     font-weight: bold;
 }
@@ -101,6 +107,7 @@
 }
 
 .status-incomplete {
+    font-family: var(--font-primary);
     color: var(--swatch-accent);
 }
 
@@ -144,10 +151,33 @@
 .item-button{
     cursor:pointer;
     background-color: var(--swatch-complement);
+}
+
+.body-text-font{
     font-family: var(--font-primary);
     color:white
 }
 
 .item-button:hover{
     background-color: var(--swatch-contrast);
+}
+
+.overflow-check{
+    overflow-y: auto;
+}
+
+.item-row-button {
+    /*cursor:pointer*/;
+    background-color: var(--swatch-primary);
+    font-weight: bold;
+}
+
+.item-row-button:hover {
+    /* background-color: yellow; */
+    background-color: var(--swatch-complement);
+}
+
+.current-list {
+    background-color: #ffc819;
+    color: black;
 }

@@ -25,11 +25,12 @@ class ListLink extends Component {
     render() {
         // DISPLAY WHERE WE ARE
         //console.log("\t\t\tListLink render");
+        let highlight = (this.props.currentListBoolean(this.props.toDoList))?"todo-list-button body-text-font current-list":"todo-list-button body-text-font";
 
         return (
             (this.state.editName)?<input 
                 id={'todo-list-' + this.props.toDoList.id} 
-                className='todo-list-button' 
+                className='todo-list-button body-text-font' 
                 autoFocus={true}
                 value={this.props.toDoList.name}
                 onBlur={this.editNameComplete}
@@ -37,7 +38,7 @@ class ListLink extends Component {
             ></input>:
             <div 
                 id={'todo-list-' + this.props.toDoList.id}
-                className='todo-list-button'
+                className={highlight}
                 onClick={this.handleLoadList}
                 onDoubleClick={this.editName}
             >
