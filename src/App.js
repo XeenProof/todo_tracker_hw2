@@ -54,6 +54,8 @@ class App extends Component {//commit test
       }
     };
 
+    console.log("this works");
+    this.shortcuts = this.shortcuts.bind(this);
 
     // SETUP OUR APP STATE
     this.state = {
@@ -324,12 +326,14 @@ class App extends Component {//commit test
     if (this.tps.hasTransactionToRedo()) {
         this.tps.doTransaction();
     }
+    this.setState({})
   }  
 
   undo = () => {
     if (this.tps.hasTransactionToUndo()) {
       this.tps.undoTransaction();
     }
+    this.setState({})
   }
 
   makeNewToDoList = () => {
@@ -437,9 +441,30 @@ class App extends Component {//commit test
               <div className="modal_button" onClick={this.deleteListCanceled}>Cancel</div>
             </div>
           </div>
-        </div>:""}
+        </div>: <div onKeyPress={this.shortcuts} />}
       </div>
     );
+  }
+
+  componentDidMount = () => {
+    document.addEventListener('keydown', this.shortcuts.bind(this));
+    // DISPLAY WHERE WE ARE
+    //console.log("\t\t\tToDoItem " + this.props.toDoListItem.id + " did mount");
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.shortcuts.bind(this));
+  }
+
+  shortcuts = (event) => {
+      if(event.ctrlKey && event.key === 'z' && this.state.modal == false){
+        console.log("Undo: " + this.tps.hasTransactionToUndo());
+        this.undo();
+      }
+      if(event.ctrlKey && event.key === 'y' && this.state.modal == false){
+        console.log("Redo: " + this.tps.hasTransactionToRedo());
+        this.redo();
+      }
   }
 }
 

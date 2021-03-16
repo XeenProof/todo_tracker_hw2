@@ -14,7 +14,6 @@ class ToDoItem extends Component {
             editDate: false,
             editStatus: false
         }
-        //console.log(this.state.item);
         // DISPLAY WHERE WE ARE
         //console.log("\t\t\tToDoItem " + this.props.toDoListItem.id + " constructor");
     }
@@ -88,18 +87,7 @@ class ToDoItem extends Component {
     }
 
     textEditChange = (event) => {
-        // console.log("edit done");
-        // let newItem = {
-        //     id: this.props.toDoListItem.id,
-        //     description: event.target.value,
-        //     due_date: this.props.toDoListItem.due_date,
-        //     status: this.props.toDoListItem.status
-        // }
-        // this.setState({
-        //     item: newItem
-        // });
         this.setState({text: event.target.value});
-        //this.props.editTextCallback(this.props.toDoListItem, event.target.value);
     }
 
     dateEdit = () => {
